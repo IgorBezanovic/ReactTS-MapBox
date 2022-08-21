@@ -10,7 +10,7 @@ export default function ComboBox({
   }: {
     addresses : string[],
     onChange : (event: React.SyntheticEvent<Element, Event>, value: string | null) => void
-  }): JSX.Element {
+  }) {
     
   return (
     <Stack 

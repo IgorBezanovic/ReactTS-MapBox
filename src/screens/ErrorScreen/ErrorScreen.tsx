@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import '../../App.css';
 
-function ErrorScreen(): JSX.Element {
+function ErrorScreen() {
   return (
-    <div className="app">
-        Error screen
-    </div>
+    <>
+      Error screen
+    </>
   );
 }
 

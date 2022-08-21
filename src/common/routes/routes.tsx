@@ -6,7 +6,7 @@ import {
 import Home from "../../screens/home/index";
 import ErrorScreen from "../../screens/home/index";
 
-function Routing(): JSX.Element {
+function Routing() {
   
   return (
     <Routes>

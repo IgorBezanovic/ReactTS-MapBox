@@ -1,7 +1,7 @@
 import React from 'react';
 import Routing from './common/routes/routes';
 
-function App(): JSX.Element {
+function App() {
 
   return (
     <Routing/>

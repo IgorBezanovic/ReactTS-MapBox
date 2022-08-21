@@ -9,11 +9,12 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  <React.StrictMode>
+  //Zakomentarisano zato sto na developmentu strict mode renderuje dva puta komponente. To radi sa ciljem da lakse uocimo eventualne greske koje pravimo.
+  // <React.StrictMode>
     <Router>
       <App />
     </Router>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

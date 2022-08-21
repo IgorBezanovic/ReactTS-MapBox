@@ -1,19 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import '../../App.css';
 import axios, { AxiosError } from 'axios';
 import Autocomplete from '../../component/Autocomplite/Autocomplite';
 import AlertBox from "../../component/AlertBox/AlertBox";
+import Map from "../../component/Map/Map";
 import { Addresses } from "../../types/addresses.model";
 import { ErrorMessage } from "../../types/errorMessage.model";
+import { Location } from "../../types/location.model";
 import { 
     BUILDING_INFORMATION,
     ADDRESSES_INFORMATION
 } from "../../common/constants/constants";
+import { 
+    DivElement,
+    MapDiv
+} from './styles';
 
-function Home(): JSX.Element {
+function Home() {
   const API_KEY = process.env.REACT_APP_X_API_KEY;
   const [addresses, setAddresses] = useState<string[]>([]);
   const [value, setValue] = useState<string | null>('');
+  const [locationValue, setLocationValue] = useState<Location>({
+    lat: 0,
+    lng: 0,
+    city: '',
+    canton:'',
+    locality: '',
+    coordinate: [[]]
+  })
 
   let [error, setError] = useState<ErrorMessage>({
     openAlert: false,
@@ -35,6 +49,17 @@ function Home(): JSX.Element {
   const getBuildingForPopup = async () => {
     try {
         const response = await axios.get(`/geo-prod/Geo/Buildings/ByEgid/1314478`);
+        const coordinatesArray = response.data.parcelInfo.geom.coordinates[0].coordinates.map((item: any) => [item.latitude, item.longitude])
+        const location = {
+            lat: response.data.coordinates.latitude,
+            lng: response.data.coordinates.longitude,
+            city: response.data.city,
+            canton: response.data.canton,
+            locality: response.data.locality,
+            coordinate: coordinatesArray
+        }
+        setLocationValue(location)
+        console.log(coordinatesArray)
         console.log(response)
     } catch (error) {
         errorHandling(error, BUILDING_INFORMATION);
@@ -53,6 +78,7 @@ function Home(): JSX.Element {
       let addressesResponse : string[] = response.data.map((item: Addresses) => item.highlight);
       const result = addressesResponse.map(item => item.replaceAll('<em>','').replaceAll('</em>',''))
       setAddresses(result);
+      console.log(response.data)
     } catch (error: unknown) {
         errorHandling(error, ADDRESSES_INFORMATION);
     }
@@ -60,19 +86,19 @@ function Home(): JSX.Element {
   
 
   useEffect(() => {
-    getAddresses();
     getBuildingForPopup();
-     //eslint-disable-next-line
+    getAddresses();
   }, []);
 
   return (
-    <div className="App">
+    <DivElement className="App">
         <Autocomplete 
             addresses={addresses!}
             onChange={(event: React.SyntheticEvent<Element, Event>, value: string | null) => setValue(value)}
             />
         {error.openAlert && <AlertBox error={error}/>} 
-    </div>
+        <Map locationValue={locationValue} />
+    </DivElement>
   );
 }
 

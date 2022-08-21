@@ -8,7 +8,7 @@ export default function AlertBox({
     error 
   }: {
     error : ErrorMessage
-  }): JSX.Element {
+  }) {
     
   return (
     <Stack 
