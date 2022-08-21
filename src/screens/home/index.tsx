@@ -20,14 +20,6 @@ function Home() {
   const API_KEY = process.env.REACT_APP_X_API_KEY;
   const [addresses, setAddresses] = useState<string[]>([]);
   const [value, setValue] = useState<string | null>('');
-  const [locationValue, setLocationValue] = useState<Location>({
-    lat: 0,
-    lng: 0,
-    city: '',
-    canton:'',
-    locality: '',
-    coordinate: [[]]
-  })
 
   let [error, setError] = useState<ErrorMessage>({
     openAlert: false,
@@ -58,7 +50,7 @@ function Home() {
             locality: response.data.locality,
             coordinate: coordinatesArray
         }
-        setLocationValue(location)
+        window.localStorage.setItem('location', JSON.stringify(location))
         console.log(coordinatesArray)
         console.log(response)
     } catch (error) {
@@ -79,6 +71,7 @@ function Home() {
       const result = addressesResponse.map(item => item.replaceAll('<em>','').replaceAll('</em>',''))
       setAddresses(result);
       console.log(response.data)
+      console.log(result)
     } catch (error: unknown) {
         errorHandling(error, ADDRESSES_INFORMATION);
     }
@@ -97,7 +90,7 @@ function Home() {
             onChange={(event: React.SyntheticEvent<Element, Event>, value: string | null) => setValue(value)}
             />
         {error.openAlert && <AlertBox error={error}/>} 
-        <Map locationValue={locationValue} />
+        <Map />
     </DivElement>
   );
 }
