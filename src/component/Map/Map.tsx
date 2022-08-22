@@ -43,9 +43,10 @@ export default function Map() {
                     'geometry': {
                         'type': 'Polygon',
                         'coordinates': [
-                        locationBern.coordinate
+                        locationBern.coordinate //Parsirano u JSON -> [[lat, long]]
                         // [
                                 //Koordinate koje sam dobio putem urla, koje se ne prikazuju na mapi, hadcode.
+                                
                                 // [47.040444, 7.619863],
                                 // [47.040571, 7.62016],
                                 // [47.040382, 7.620331],
@@ -55,7 +56,8 @@ export default function Map() {
                                 // [47.040265, 7.620052],
                                 // [47.040444, 7.619863]
 
-                        //     //Test poyligon koji radi state Maine
+                        //     //Test poyligon koji radi, US state Maine
+
                         //     // [-67.13734, 45.13745],
                         //     // [-66.96466, 44.8097],
                         //     // [-68.03252, 44.3252],
