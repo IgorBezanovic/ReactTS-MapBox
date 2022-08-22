@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../App.css';
 import axios, { AxiosError } from 'axios';
 import Autocomplete from '../../component/Autocomplite/Autocomplite';
@@ -9,17 +9,21 @@ import { ErrorMessage } from "../../types/errorMessage.model";
 import { Location } from "../../types/location.model";
 import { 
     BUILDING_INFORMATION,
-    ADDRESSES_INFORMATION
+    ADDRESSES_INFORMATION,
+    LAT_LNG_INFORMATION
 } from "../../common/constants/constants";
 import { 
-    DivElement,
-    MapDiv
+    DivElement
 } from './styles';
 
 function Home() {
   const API_KEY = process.env.REACT_APP_X_API_KEY;
   const [addresses, setAddresses] = useState<string[]>([]);
-  const [value, setValue] = useState<string | null>('');
+
+  let [customLocation, setCustomLocation] = useState<Location>({
+    lat: 0,
+    lng: 0,
+  });
 
   let [error, setError] = useState<ErrorMessage>({
     openAlert: false,
@@ -51,8 +55,6 @@ function Home() {
             coordinate: coordinatesArray
         }
         window.localStorage.setItem('location', JSON.stringify(location))
-        console.log(coordinatesArray)
-        console.log(response)
     } catch (error) {
         errorHandling(error, BUILDING_INFORMATION);
       }
@@ -70,14 +72,21 @@ function Home() {
       let addressesResponse : string[] = response.data.map((item: Addresses) => item.highlight);
       const result = addressesResponse.map(item => item.replaceAll('<em>','').replaceAll('</em>',''))
       setAddresses(result);
-      console.log(response.data)
-      console.log(result)
     } catch (error: unknown) {
         errorHandling(error, ADDRESSES_INFORMATION);
     }
   };
-  
 
+  const getLatLng = async (street: string | null) => {
+    const MAPBOX_KEY = process.env.REACT_APP_MAPBOX_KEY;
+    try {
+      const response = await axios.put(`https://api.mapbox.com/geocoding/v5/switzerland/${street}.json`, MAPBOX_KEY)
+      setCustomLocation(response.data);
+    } catch (error: unknown) {
+        errorHandling(error, LAT_LNG_INFORMATION);
+    }
+  };
+  
   useEffect(() => {
     getBuildingForPopup();
     getAddresses();
@@ -87,10 +96,10 @@ function Home() {
     <DivElement className="App">
         <Autocomplete 
             addresses={addresses!}
-            onChange={(event: React.SyntheticEvent<Element, Event>, value: string | null) => setValue(value)}
+            onChange={(event: React.SyntheticEvent<Element, Event>, value: string | null) => getLatLng(value)}
             />
         {error.openAlert && <AlertBox error={error}/>} 
-        <Map />
+        <Map customLocation={customLocation}/>
     </DivElement>
   );
 }

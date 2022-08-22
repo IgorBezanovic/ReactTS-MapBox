@@ -19,7 +19,7 @@ export default function AlertBox({
         <Alert 
           variant="outlined" 
           severity={error.code !== 204 ? "error" : "info"}>
-            `{error.message}: {error.code}`
+            `Error for: {error.message}{error.code ? `: ${error.code}`: ``}`
         </Alert>  
     </Stack>
   );

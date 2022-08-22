@@ -1,5 +1,5 @@
 export type ErrorMessage = {
     openAlert: boolean;
-    code?: number;
+    code?: number | string;
     message?: string;
   };

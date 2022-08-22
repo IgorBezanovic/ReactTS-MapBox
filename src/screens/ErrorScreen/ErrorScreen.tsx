@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
-import '../../App.css';
+import React from 'react';
+import { 
+  DivElement,
+} from '../home/styles';
 
 function ErrorScreen() {
   return (
-    <>
+    <DivElement>
       Error screen
-    </>
+    </DivElement>
   );
 }
 

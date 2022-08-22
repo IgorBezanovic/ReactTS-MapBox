@@ -9,7 +9,7 @@ export default function ComboBox({
     onChange 
   }: {
     addresses : string[],
-    onChange : (event: React.SyntheticEvent<Element, Event>, value: string | null) => void
+    onChange : (event: React.SyntheticEvent<Element, Event>, value: string | null) => Promise<void>
   }) {
     
   return (
